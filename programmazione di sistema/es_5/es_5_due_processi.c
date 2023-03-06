@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     pipe(p1p2);
     pipe(p2p0);
-    while (1)
+    while(1)
     {
         printf("Inserisci codice:\n");
         scanf("%s", codice);
@@ -72,10 +72,14 @@ int main(int argc, char *argv[])
             execl("/bin/grep", "grep", "-c", "insoluto", NULL);
             return -1;
         }
+        close(p2p0[WRITE]);
+        close(p1p2[READ]);
+        close(p1p2[WRITE]);
 
         read(p2p0[READ], stringa, sizeof(stringa));
         printf("Sono stati trovati %d insoluti\n", atoi(stringa));
         tot = tot + atoi(stringa);
+        close(p2p0[READ]);
 
         if (pid < 0)
         {
